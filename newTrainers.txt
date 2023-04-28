@@ -1,0 +1,6 @@
+trainerID#name#address#email
+Shaliyah Johnson#535 63rd street south#srjohnson16@crimson.ua.edu
+Blake Johnson#120 Dirt Road#blakesemail@gmail.crimson.ua.edu
+Olivia Pope#424 Her Way#theoliviapope@gmail.comm
+JaQuan Young#394 Browns way#young@gmail.com 
+Tems#Brentwood#tem@gmail.com
