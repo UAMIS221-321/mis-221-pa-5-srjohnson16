@@ -4,36 +4,43 @@ namespace mis_221_pa_5_srjohnson16
     {
         //instance variables
         private int listingID;
+        private int trainerID;
         private string trainerName;
-        private string customerName; 
         private string sessionDate;
         private string sessionTime;
-        private string sessionCost;
+        private decimal sessionCost;
         private bool isTaken = false;
-        static private int idCounter = 0;
-
+        private bool isNotAvail = false;
+        static private int count = 0;
         public Listing()
         {
 
         }
-
-        public Listing(string trainerName, string sessionDate, string sessionTime, string sessionCost, bool isTaken)
+        public Listing(int listingID, string trainerName, string sessionDate, string sessionTime, decimal sessionCost, bool isTaken)
         {
-            this.listingID = idCounter;
-            idCounter += 1;
+            this.listingID = listingID;
             this.trainerName = trainerName;
             this.sessionDate = sessionDate;
             this.sessionTime = sessionTime;
             this.sessionCost = sessionCost;
             this.isTaken = isTaken;
+
         }
         public void SetListingID(int listingID)
         {
-            this.listingID = listingID;
+            this.listingID = count++;
         }
         public int GetListingID()
         {
             return listingID;
+        }
+        public void SetTrainerID(int trainerID)
+        {
+            this.trainerID = trainerID;
+        }
+        public int GetTrainerID()
+        {
+            return trainerID;
         }
         public void SetTrainerName(string trainerName)
         {
@@ -59,11 +66,11 @@ namespace mis_221_pa_5_srjohnson16
         {
             return sessionTime;
         }
-        public void SetSessionCost(string sessionCost)
+        public void SetSessionCost(decimal sessionCost)
         {
             this.sessionCost = sessionCost;
         }
-        public string GetSessionCost()
+        public decimal GetSessionCost()
         {
             return sessionCost;
         }
@@ -75,34 +82,46 @@ namespace mis_221_pa_5_srjohnson16
         {
             return isTaken;
         }
-        static public void SetIDCount(int idCounter)
+        public void SetIsNotAvail(bool isNotAvail)
         {
-            Listing.idCounter = idCounter;
+            this.isNotAvail = isNotAvail;
         }
-        static public void DecIDCount()
+        public bool GetIsNotAvail()
         {
-            Listing.idCounter--;
+            return isTaken;
         }
-        static public void IncIDCount()
+        static public void SetCount(int count)
         {
-            Listing.idCounter++;
+            Listing.count = count;
         }
-        static public int GetIDCount()
+        static public void DecCount()
         {
-            return Listing.idCounter;
+            Listing.count--;
         }
-
+        static public void IncCount()
+        {
+            Listing.count++;
+        }
+        static public int GetCount()
+        {
+            return Listing.count;
+        }
         public string ToFile()
         {
-            return $"{trainerName}#{sessionDate}#{sessionTime}#{sessionCost}#{isTaken}";
+            return $"{listingID}#{trainerName}#{sessionDate}#{sessionTime}#{sessionCost}#{isTaken}";
         }
-        
         public string ToListingString()
         {
-            return $"Listing ID: {listingID}\tTrainer name: {trainerName}\tSession Date: {sessionDate}\tSession Time: {sessionTime}\tCost of session ${sessionCost}";
+            string stat = "";
+            if (isTaken == true)
+            {
+                stat = "Not Availiable";
+            }
+            else if (isTaken == false)
+            {
+                stat = "Availiable";
+            }
+            return $"Listing ID: {listingID} \tTrainer name: {trainerName} \tSession Date: {sessionDate} \tSession Time: {sessionTime} \tCost of session ${sessionCost}\tStatus: {stat}";
         }
-
     }
 }
-
-//only display the avaliable movies

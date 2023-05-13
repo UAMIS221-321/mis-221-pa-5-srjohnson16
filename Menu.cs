@@ -3,40 +3,47 @@ namespace mis_221_pa_5_srjohnson16
     public class Menu
     {
 
+        private static int MAX_ARRAY_SIZE = 100;
+        static private Trainer[] trainers = new Trainer[MAX_ARRAY_SIZE];
+        static private TrainerUtility tUtility = new TrainerUtility(trainers);
+
+        static private Listing[] listings = new Listing[100];
+        static private ListingUtility lUtility = new ListingUtility(listings);
+
+        static private Booking[] sessions = new Booking[MAX_ARRAY_SIZE];
+        static private BookingUtility bUtility = new BookingUtility(sessions, 100, lUtility, listings);
+
+        // private Report[] reports = new Report[MAX_ARRAY_SIZE];
 
         public static void Start()
         {
-            ListingUtility.InitListing();
-            
             while (true)
             {
                 Console.WriteLine("\n\n\n\n\n");
 
-                // Console.Write(new string(' ', (Console.WindowWidth - "Welcome to [company name]. Choose an option".Length) / 2));
-                Console.WriteLine("Welcome to [company name]. Choose an option");
+                Console.Write(new string(' ', (Console.WindowWidth - "Welcome to Train Like A Champion. Please choose an option".Length) / 2));
+                Console.WriteLine("Welcome to Train Like A Champion. Please choose an option");
 
-                // Console.Write(new string(' ', (Console.WindowWidth - "1. Manage trainer data".Length) / 2));
+                Console.Write(new string(' ', (Console.WindowWidth - "1. Manage trainer data".Length) / 2));
                 Console.WriteLine("1. Manage trainer data");
 
-                // Console.Write(new string(' ', (Console.WindowWidth - "2. Manage listing data".Length) / 2));
+                Console.Write(new string(' ', (Console.WindowWidth - "2. Manage listing data".Length) / 2));
                 Console.WriteLine("2. Manage listing data");
 
-                // Console.Write(new string(' ', (Console.WindowWidth - "3. Manage customer booking data".Length) / 2));
+                Console.Write(new string(' ', (Console.WindowWidth - "3. Manage customer booking data".Length) / 2));
                 Console.WriteLine("3. Manage customer booking data");
 
-                // Console.Write(new string(' ', (Console.WindowWidth - "4. Run reports".Length) / 2));
+                Console.Write(new string(' ', (Console.WindowWidth - "4. Run reports".Length) / 2));
                 Console.WriteLine("4. Run reports");
 
-                // Console.Write(new string(' ', (Console.WindowWidth - "5. Exit the application".Length) / 2));
+                Console.Write(new string(' ', (Console.WindowWidth - "5. Exit the application".Length) / 2));
                 Console.WriteLine("5. Exit the application");
 
-                // Console.Write(new string(' ', (Console.WindowWidth - "Enter your choice: ".Length) / 2));
+                Console.Write(new string(' ', (Console.WindowWidth - "Enter your choice: ".Length) / 2));
                 Console.Write("Enter your choice: ");
                 string choiceStr = Console.ReadLine();
-                //string choiceStr = "1";                                      //todo Undo Comment
                 if (int.TryParse(choiceStr, out int choice))
                 {
-
                     switch (choice)
                     {
                         case 1:
@@ -68,14 +75,13 @@ namespace mis_221_pa_5_srjohnson16
 
             }
         }
-
-        // static void listingMenu(ListingUtility listingUtility, Report listingReport)
         static void listingMenu()
         {
-            //Console.Clear();
-            ListingUtility.InitListing();
-            TrainerUtility.GetAllTrainers();
-            Report.DisplayAllListings();
+            //? Should populate the listings array
+            lUtility.InitListing();
+            //? Should only show avaliable listings 
+            lUtility.GetAvailableListings(listings);
+
 
             Console.WriteLine("\n\n");
             Console.WriteLine("1. Add Listing");
@@ -92,19 +98,16 @@ namespace mis_221_pa_5_srjohnson16
                 {
                     case 1:
                         //add listing
-                        ListingUtility.AddListing();
-                        //     ListingUtility.
-                        //   Report.DisplayAllListings();
+                        lUtility.AddListing();
                         break;
 
                     case 2:
                         //edit listing 
-                        ListingUtility.EditListing();
-
+                        lUtility.EditListing();
                         break;
                     case 3:
                         //delete listing
-                        ListingUtility.DeleteListing();
+                        lUtility.DeleteListing();
                         break;
                     case 4:
                         //exit
@@ -125,12 +128,10 @@ namespace mis_221_pa_5_srjohnson16
 
         static void trainerMenu()
         {
-            //Console.Clear();
-            System.Console.WriteLine("Current trainers..");
-            //gets current trainers from trainer.txt file 
-            TrainerUtility.GetAllTrainers();
-             Report.DisplayAllTrainers();
+            Console.Clear();
 
+            tUtility.InitTrainers();
+            tUtility.GetTrainers();
             Console.WriteLine("\n\n");
             Console.WriteLine("1. Add trainer");
             Console.WriteLine("2. Edit trainer");
@@ -146,29 +147,23 @@ namespace mis_221_pa_5_srjohnson16
                 {
                     case 1:
                         //add trainer
-                        TrainerUtility.AddTrainer();
-                        TrainerUtility.GetAllTrainers();
-                       // Report.DisplayAllTrainers();
+                        tUtility.AddTrainer();
 
                         break;
 
                     case 2:
-                        TrainerUtility.EditTrainer();
-                        Report.DisplayAllTrainers();
-
+                        tUtility.EditTrainer();
                         break;
                     case 3:
                         //delete trainer
-
-                        TrainerUtility.DeleteTrainer();
-                        Report.DisplayAllTrainers();
+                        tUtility.DeleteTrainer();
                         break;
                     case 4:
                         //exit
                         return;
 
                     default:
-                        // Console.Write(new string(' ', (Console.WindowWidth - "Invalid choice!".Length) / 2));
+                        Console.Write(new string(' ', (Console.WindowWidth - "Invalid choice!".Length) / 2));
                         Console.WriteLine("Invalid choice!");
                         break;
                 }
@@ -178,15 +173,17 @@ namespace mis_221_pa_5_srjohnson16
                 // Console.Write(new string(' ', (Console.WindowWidth - "Invalid input!".Length) / 2));
                 Console.WriteLine("Invalid input!");
             }
-
-
         }
 
         static void bookingMenu()
         {
-            //Console.Clear();
+            Console.Clear();
             //1. Show avaliable listings
-            Report.DisplayAllListings();
+            //? Should populate the listings array
+            lUtility.InitListing();
+            //? Should only show avaliable listings 
+            lUtility.GetAvailableListings(listings);
+
             Console.WriteLine("\n\n");
             Console.WriteLine("1. Book Session");
             Console.WriteLine("3. Cancel Booking");
@@ -199,16 +196,15 @@ namespace mis_221_pa_5_srjohnson16
                 switch (choice)
                 {
                     case 1:
-                       // Booking.AddBooking
-                        BookingUtility.AddBooking();
+                        bUtility.AddBooking();
+
                         break;
                     case 2:
-                        //  Booking.EditBooking();
+                        //  bUtility.EditBooking();
                         break;
                     case 3:
-                        //   Booking.CancelBooking();
-                        //session status "cancelled"
-                        //listing status "isTaken = false"
+                        //   bUtility.CancelBooking();
+
                         break;
                     case 4:
                         return;
@@ -226,7 +222,6 @@ namespace mis_221_pa_5_srjohnson16
             }
 
         }
-
         static void reportMenu()
         {
 
@@ -274,51 +269,49 @@ namespace mis_221_pa_5_srjohnson16
                 Console.WriteLine("Invalid input!");
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

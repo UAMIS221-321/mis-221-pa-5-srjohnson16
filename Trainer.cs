@@ -7,17 +7,16 @@ namespace mis_221_pa_5_srjohnson16
         string name = "";
         string address = "";
         string email = "";
-        static private int idCounter = 0;
+        static private int count = 0;
 
         //constructor
         public Trainer()
         {
 
         }
-        public Trainer(string name, string address, string email)
+        public Trainer(int trainerID, string name, string address, string email)
         {
-            this.trainerID = idCounter;
-            idCounter += 1;
+            this.trainerID = count++;
             this.name = name;
             this.address = address;
             this.email = email;
@@ -31,7 +30,6 @@ namespace mis_221_pa_5_srjohnson16
         {
             return trainerID;
         }
-
         public string GetName()
         {
             return name;
@@ -56,28 +54,29 @@ namespace mis_221_pa_5_srjohnson16
         {
             this.email = email;
         }
-
         static public void SetCount(int idCounter)
         {
-            Trainer.idCounter = idCounter;
+            Trainer.count = idCounter;
         }
         static public void DecCount()
         {
-            Trainer.idCounter--;
+            Trainer.count--;
         }
         static public void IncCount()
         {
-            Trainer.idCounter++;
+            Trainer.count++;
         }
-
+        static public int GetCount() {
+            return Trainer.count;
+        }
 
         public override string ToString()
         {
-            return $"Trainer: {idCounter}| Name: {name}| Address: {address}| Email: {email}";
+            return $"Trainer: {trainerID}\t Name: {name}\t Address: {address}\t Email: {email}";
         }
-        public string ToFile()
+        public string ToTrainerFile()
         {
-            return $"{name}#{address}#{email}";
+            return $"{trainerID}#{name}#{address}#{email}";
         }
 
     }

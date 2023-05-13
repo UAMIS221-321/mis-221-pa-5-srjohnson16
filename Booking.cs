@@ -3,31 +3,41 @@ namespace mis_221_pa_5_srjohnson16
     public class Booking
     {
         private int sessionID;
-        private string trainerID;
-        private string listingID;
+        private int trainerID;
+        private string trainerName;
         private string customerName;
         private string customerEmail;
-        private DateTime trainingDate;
-        private string status;
+        private DateTime bookedTrainingDate = DateTime.Now;
+        private string sessionStatus = "";
+        static private int count = 0;
 
-        static int count = 0;
-
+        static public void SetCount(int count)
+        {
+            Booking.count = count;
+        }
+        static public int GetCount()
+        {
+            return count;
+        }
+        static public void IncCount()
+        {
+            Booking.count++;
+        }
         public Booking()
         {
 
         }
-        public Booking(string trainerID, string listingID, string customerEmail, string customerName)
+        public Booking(int sessionID, string customerName, string customerEmail, string trainingDate, int trainerID, string trainerName, string sessionStatus)
         {
-            this.sessionID = count;
-            count += 1;
-            DateTime today = DateTime.Now;
-            this.trainingDate = today;
-            this.trainerID = trainerID;
-            this.listingID = listingID;
+            this.sessionID = sessionID;
             this.customerName = customerName;
             this.customerEmail = customerEmail;
-        }
+            this.trainingDate = trainingDate;
+            this.trainerID = trainerID;
+            this.trainerName = trainerName;
+            this.sessionStatus = sessionStatus;
 
+        }
         public int GetSessionID()
         {
             return sessionID;
@@ -68,9 +78,50 @@ namespace mis_221_pa_5_srjohnson16
         {
             return Booking.count;
         }
+
+        public DateTime GetTrainingDate()
+        {
+            return trainingDate;
+        }
+
+        public void SetTrainingDate(string triainingDate)
+        {
+            this.trainingDate = trainingDate;
+        }
+
+        public void SetTrainerID(int trainerID)
+        {
+            this.trainerID = trainerID;
+        }
+        public int GetTrainingID()
+        {
+            return trainerID;
+        }
+        public void SetTrainerName(string trainerName)
+        {
+            this.trainerName = trainerName;
+        }
+
+        public string GetTrainerName()
+        {
+            return trainerName;
+        }
+
+        public void SetSessionStatus(string sessionStatus)
+        {
+            this.sessionStatus = sessionStatus;
+        }
+
+        public string GetSessionStatus()
+        {
+            return sessionStatus;
+        }
+
         public string ToSessionFile()
         {
-            return $"{sessionID}#{GetCustomerName()}#{GetCustomerEmail()}#{trainingDate.ToString("yyyy-MM-dd HH:mm:ss")}";
+            return $"{sessionID}#{customerName}#{customerEmail}#{this.bookedTrainingDate}#{trainerID}#{trainerName}#{sessionStatus}";
         }
+
+
     }
 }

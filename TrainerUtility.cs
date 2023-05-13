@@ -2,8 +2,15 @@ namespace mis_221_pa_5_srjohnson16
 {
     public class TrainerUtility
     {
-        private static int MAX_TRAINER_SIZE = 100;
-        private static Trainer[] trainers = new Trainer[MAX_TRAINER_SIZE];
+        private Trainer[] trainers;
+        public TrainerUtility(Trainer[] trainers)
+        {
+            this.trainers = trainers;
+        }
+        public TrainerUtility()
+        { }
+
+
         //Methods
         private static int count = 0;
 
@@ -20,32 +27,33 @@ namespace mis_221_pa_5_srjohnson16
             TrainerUtility.count = count;
         }
 
-        public static void GetAllTrainers()
+        public Trainer[] InitTrainers()
         {
             System.Console.WriteLine("Getting trainers from file...");
-
             StreamReader inFile = new StreamReader("trainer.txt");
             string line = inFile.ReadLine();
-            TrainerUtility.SetCount(0);
+            Trainer.SetCount(0);
+            int count = 0;
             while (line != null && line != "")
             {
                 string[] temp = line.Split('#'); //[0,1,2,3]
-
-                trainers[TrainerUtility.GetCount()] = new Trainer(temp[0], temp[1], temp[2]);
-                //count++;
-
+                trainers[count] = new Trainer(int.Parse(temp[0]), temp[1], temp[2], temp[3]);
+                count++;
                 line = inFile.ReadLine();
-
-                TrainerUtility.IncCount();
             }
-
+            Trainer.SetCount(count);
+            //close
             inFile.Close();
+
+            return trainers;
         }
-        public static void AddTrainer()
+        public void AddTrainer()
         {
             Trainer newTrainer = new Trainer();
-            System.Console.WriteLine("Please enter the trainer ID");
-            newTrainer.SetID(int.Parse(Console.ReadLine()));
+         //   System.Console.WriteLine("Please enter the trainer ID");
+            newTrainer.SetID(Trainer.GetCount() + 1);
+
+            //!! SET TRAINER ID
 
             System.Console.WriteLine("Please enter the trainer name");
             newTrainer.SetName(Console.ReadLine());
@@ -56,15 +64,13 @@ namespace mis_221_pa_5_srjohnson16
             System.Console.WriteLine("Please enter the trainer email");
             newTrainer.SetEmail(Console.ReadLine());
 
-            trainers[count] = newTrainer;
+            trainers[Trainer.GetCount()] = newTrainer;
             System.Console.WriteLine("Trainer successfully added.");
-
             Trainer.IncCount();
-
             Save();
 
         }
-        public static void EditTrainer()
+        public void EditTrainer()
         {
             System.Console.WriteLine("What is the ID of the trainer you want to update");
             string searchVal = Console.ReadLine();
@@ -76,9 +82,6 @@ namespace mis_221_pa_5_srjohnson16
 
             if (foundIndex != -1)
             {
-                System.Console.WriteLine("Enter the trainer's ID");
-                trainers[foundIndex].SetID(int.Parse(Console.ReadLine()));
-
                 System.Console.WriteLine("Enter the trainer name ");
                 trainers[foundIndex].SetName(Console.ReadLine());
 
@@ -92,7 +95,7 @@ namespace mis_221_pa_5_srjohnson16
             System.Console.WriteLine("Update successful.");
             Save();
         }
-        public static void DeleteTrainer()
+        public void DeleteTrainer()
         {
             //find the trainer to delete based on trainer id,name,email,address
             System.Console.WriteLine("What is the ID of the trainer you want to delete?");
@@ -102,7 +105,7 @@ namespace mis_221_pa_5_srjohnson16
 
             if (foundIndex != -1) //if found 
             {
-                for (int j = foundIndex; j < count - 1; j++) //from position to n-1
+                for (int j = foundIndex; j < Trainer.GetCount()- 1; j++) //from position to n-1
                 {
                     trainers[j] = trainers[j + 1];
                 }
@@ -110,14 +113,12 @@ namespace mis_221_pa_5_srjohnson16
             else System.Console.WriteLine("Trainer ID not found.");
 
             Trainer.DecCount();
-
-
             Save();
         }
-        private static int FindTrainer(string searchVal)
+        private int FindTrainer(string searchVal)
         {
             //loops through array to see if elements match
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < Trainer.GetCount(); i++)
             {
                 if (trainers[i].GetID() == int.Parse(searchVal))
                 {
@@ -127,30 +128,38 @@ namespace mis_221_pa_5_srjohnson16
             }
             return -1;
         }
-        private static void Save()
+        private void Save()
         {
             System.Console.WriteLine("Saving to file...");
             //open
             StreamWriter outFile = new StreamWriter("trainer.txt");
 
             //process
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i <Trainer.GetCount(); i++)
             {
-                outFile.WriteLine(trainers[i].ToFile());
+                outFile.WriteLine(trainers[i].ToTrainerFile());
             }
 
             //close 
             outFile.Close();
         }
-
-        public static Trainer[] GetTrainers()
+        public void GetTrainers()
         {
-            return trainers;
+            Thread.Sleep(1000);
+            System.Console.WriteLine("Available Trainers..");
+
+            for (int i = 0; i < Trainer.GetCount(); i++)
+            {
+
+                System.Console.WriteLine(trainers[i].ToString());
+            }
         }
+
+        public Trainer FindTrainerById(string trainerID)
+        {
+            return trainers[FindTrainer(trainerID)];
+        }
+
+
     }
 }
-
-//display list of avaliable trainers
-//Ask user which trainer would they like to book 
-//enter trainer id to book
-//
