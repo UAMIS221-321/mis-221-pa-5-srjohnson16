@@ -9,20 +9,10 @@ namespace mis_221_pa_5_srjohnson16
         private string customerEmail;
         private DateTime bookedTrainingDate = DateTime.Now;
         private string sessionStatus = "";
+        string trainingDate;
         static private int count = 0;
 
-        static public void SetCount(int count)
-        {
-            Booking.count = count;
-        }
-        static public int GetCount()
-        {
-            return count;
-        }
-        static public void IncCount()
-        {
-            Booking.count++;
-        }
+
         public Booking()
         {
 
@@ -79,7 +69,7 @@ namespace mis_221_pa_5_srjohnson16
             return Booking.count;
         }
 
-        public DateTime GetTrainingDate()
+        public string GetTrainingDate()
         {
             return trainingDate;
         }

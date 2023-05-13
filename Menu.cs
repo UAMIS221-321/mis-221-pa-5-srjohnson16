@@ -12,8 +12,7 @@ namespace mis_221_pa_5_srjohnson16
 
         static private Booking[] sessions = new Booking[MAX_ARRAY_SIZE];
         static private BookingUtility bUtility = new BookingUtility(sessions, 100, lUtility, listings);
-
-        // private Report[] reports = new Report[MAX_ARRAY_SIZE];
+        private static Report reports = new Report(sessions);
 
         public static void Start()
         {
@@ -90,8 +89,7 @@ namespace mis_221_pa_5_srjohnson16
             Console.WriteLine("4. Back to Main Menu");
             Console.Write("Enter your choice: ");
 
-            string choiceStr = Console.ReadLine();                    //TODO Undo comment
-                                                                      //  string choiceStr = "1";
+            string choiceStr = Console.ReadLine();
             if (int.TryParse(choiceStr, out int choice))
             {
                 switch (choice)
@@ -180,13 +178,17 @@ namespace mis_221_pa_5_srjohnson16
             Console.Clear();
             //1. Show avaliable listings
             //? Should populate the listings array
-            lUtility.InitListing();
+
             //? Should only show avaliable listings 
-            lUtility.GetAvailableListings(listings);
+            //  lUtility.GetAvailableListings(listings);
+            lUtility.InitListing();
+            bUtility.InitSessions();
+
 
             Console.WriteLine("\n\n");
-            Console.WriteLine("1. Book Session");
-            Console.WriteLine("3. Cancel Booking");
+            Console.WriteLine("1. View Avaliable Bookings");
+            Console.WriteLine("2. Book a Session");
+            Console.WriteLine("3. Cancel Session");
             Console.WriteLine("4. Back to Main Menu");
             Console.Write("Enter your choice: ");
             string choiceStr = Console.ReadLine();
@@ -196,28 +198,35 @@ namespace mis_221_pa_5_srjohnson16
                 switch (choice)
                 {
                     case 1:
-                        bUtility.AddBooking();
+
+                        bUtility.PrintAvailableSessions(listings);
+                        System.Console.WriteLine("Enter any key to continue.");
+                        Console.ReadKey();
 
                         break;
                     case 2:
-                        //  bUtility.EditBooking();
-                        break;
+                        lUtility.GetAvailableListings(listings);
+                        bUtility.AddBooking();
+                        return;
                     case 3:
-                        //   bUtility.CancelBooking();
+                        bUtility.CancelBooking();
+                        System.Console.WriteLine("Enter any key to continue.");
+                        Console.ReadKey();
+
 
                         break;
                     case 4:
                         return;
 
                     default:
-                        // Console.Write(new string(' ', (Console.WindowWidth - "Invalid choice!".Length) / 2));
+                        Console.Write(new string(' ', (Console.WindowWidth - "Invalid choice!".Length) / 2));
                         Console.WriteLine("Invalid choice!");
                         break;
                 }
             }
             else
             {
-                // Console.Write(new string(' ', (Console.WindowWidth - "Invalid input!".Length) / 2));
+                Console.Write(new string(' ', (Console.WindowWidth - "Invalid input!".Length) / 2));
                 Console.WriteLine("Invalid input!");
             }
 
@@ -225,7 +234,8 @@ namespace mis_221_pa_5_srjohnson16
         static void reportMenu()
         {
 
-            //Console.Clear();
+            Console.Clear();
+            bUtility.InitSessions();
             Console.WriteLine("\n\n");
             Console.WriteLine("1. View Customer Sessions");
             Console.WriteLine("2. View All Customer Sessions sorted by date");
@@ -241,31 +251,45 @@ namespace mis_221_pa_5_srjohnson16
                 switch (choice)
                 {
                     case 1:
-                        //add trainer
-                        //Report.CustomerSessions();
+                        System.Console.WriteLine("No function");
+                        System.Console.WriteLine("Enter any key to continue.");
+                        Console.ReadKey();
+
                         break;
                     case 2:
-                        //Report.CustomerSessByDate();
+
+                        bUtility.InitSessions();
+                        reports.HistoricalCustomerSessions();
+                        System.Console.WriteLine("Enter any key to continue.");
+                        Console.ReadKey();
                         break;
                     case 3:
-                        //Report.MontlyRevenue();
-                        //todo: Quarterly revenue
+                        System.Console.WriteLine("No function");
+
+                        System.Console.WriteLine("Enter any key to continue.");
+                        Console.ReadKey();
+
+
                         break;
                     case 4:
-                        //Reprt.YearlyRevenue();
+                        System.Console.WriteLine("No function");
+
+                        System.Console.WriteLine("Enter any key to continue.");
+                        Console.ReadKey();
+
                         break;
                     case 5:
                         return;
 
                     default:
-                        // Console.Write(new string(' ', (Console.WindowWidth - "Invalid choice!".Length) / 2));
+                        Console.Write(new string(' ', (Console.WindowWidth - "Invalid choice!".Length) / 2));
                         Console.WriteLine("Invalid choice!");
                         break;
                 }
             }
             else
             {
-                // Console.Write(new string(' ', (Console.WindowWidth - "Invalid input!".Length) / 2));
+                Console.Write(new string(' ', (Console.WindowWidth - "Invalid input!".Length) / 2));
                 Console.WriteLine("Invalid input!");
             }
         }

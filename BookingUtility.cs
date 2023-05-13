@@ -9,6 +9,7 @@ namespace mis_221_pa_5_srjohnson16
 
         private int MAX_SESSIONS;
         private ListingUtility listingUtility = new ListingUtility();
+        // private BookingUtility bUtility = new BookingUtility();
 
 
         public BookingUtility(Booking[] sessions, int MAX_SESSIONS, ListingUtility listingUtility, Listing[] listings)
@@ -19,36 +20,36 @@ namespace mis_221_pa_5_srjohnson16
             this.listingUtility = listingUtility;
         }
         public BookingUtility() { }
-        public BookingUtility(Listing[] listings)
+        private BookingUtility(Listing[] listings)
         {
             this.listings = listings;
         }
 
-        // public void InitSessions()
-        // {
-        //     //open
-        //     StreamReader inFile = new StreamReader("transactions.txt");
-        //     //process
-        //     string line = inFile.ReadLine();
-        //     Booking.SetCount(0);
-        //     int count = 0;
-        //     while (line != null)
-        //     {
-        //         System.Console.WriteLine("Line" + line);
-        //         string[] temp = line.Split('#');
-        //         sessions[Booking.GetCount()] = new Booking(int.Parse(temp[0]), temp[1], temp[2], temp[3], int.Parse(temp[4]), temp[5], temp[6]);
-        //         count++;
-        //         line = inFile.ReadLine();
-        //     }
-        //     Booking.SetCount(count);
-        //     //write sessions to file
-        //     for (int i = 0; i < Booking.GetCount(); i++)
-        //     {
-        //         System.Console.WriteLine($"{sessions[i].ToSessionFile()}");
-        //     }
-        //     //close
-        //     inFile.Close();
-        // }
+        public void InitSessions()
+        {
+            //open
+            StreamReader inFile = new StreamReader("transactions.txt");
+            //process
+            string line = inFile.ReadLine();
+            Booking.SetSessionCount(0);
+            int count = 0;
+            while (line != null && line != "")
+            {
+                System.Console.WriteLine("Line" + line);
+                string[] temp = line.Split('#');
+                //public Booking(int sessionID, string customerName, string customerEmail, string trainingDate, int trainerID, string trainerName, string sessionStatus)
+                sessions[count] = new Booking(int.Parse(temp[0]), temp[1], temp[2], temp[3], int.Parse(temp[4]), temp[5], temp[6]);
+                count++;
+                line = inFile.ReadLine();
+            }
+            Booking.SetSessionCount(count);
+          
+            inFile.Close();
+            SaveSession();
+            //close
+
+        }
+
         //a booking object that accepts a listing array. Prints avaliable listing to screen
         public void PrintAvailableSessions(Listing[] listings)
         {
@@ -62,47 +63,17 @@ namespace mis_221_pa_5_srjohnson16
 
             }
         }
-
-        // public Listing GetSelectedListing(int listingID)
+        // private int FindListing(string searchVal)
         // {
-        //     StreamReader inFile = new StreamReader("listings.txt");
-        //     string line = inFile.ReadLine();
-        //     while (line != null)
+        //     for (int i = 0; i < Listing.GetCount(); i++)
         //     {
-        //         string[] temp = line.Split('#');
-        //         if (int.Parse(temp[0]) == listingID)
+        //         if (listings[i].GetListingID() == int.Parse(searchVal))
         //         {
-        //             inFile.Close();
-        //             return new Listing(int.Parse(temp[0]), temp[1], temp[2], temp[3], int.Parse(temp[4]), bool.Parse(temp[5]));
+        //             System.Console.WriteLine("Listing found..");                        //!Delete
+        //             return i;
         //         }
-        //         line = inFile.ReadLine();
         //     }
-        //     inFile.Close();
-        //     return null;
-        // }
-        public Listing FindListingByID(string listingId)
-        {
-            // Listing[] foundListing = listings[FindListing(listingId)];
-            return listings[FindListing(listingId)];
-        }
-        private int FindListing(string searchVal)
-        {
-            for (int i = 0; i < Listing.GetCount(); i++)
-            {
-                if (listings[i].GetListingID() == int.Parse(searchVal))
-                {
-                    System.Console.WriteLine("Listing found..");                        //!Delete
-                    return i;
-                }
-            }
-            return -1;
-        }
-        // public void MarkSessionAsTaken(string selectedListing)
-        // {
-        //     //returns the object 
-        //     FindSessionById(selectedListing).SetIsTaken(true);
-
-        //     SaveSession();
+        //     return -1;
         // }
 
 
@@ -111,34 +82,36 @@ namespace mis_221_pa_5_srjohnson16
         {
             try
             {
-            //1. View avaliable sessios
-            BookingUtility bookingUtility = new BookingUtility(listings);
+                //1. View avaliable sessios
+                //  BookingUtility bookingUtility = new BookingUtility(listings);
+                // bUtility.PrintAvailableSessions(listings);
 
-            Booking newSession = new Booking();
-            Console.Write("Enter the listing ID of the session you would like to book: ");
-            string selectedListingID = Console.ReadLine();
+                Booking newSession = new Booking();
+                Console.Write("Enter the listing ID to book a session: ");
+                string selectedListingID = Console.ReadLine();
 
-            Listing selectedListing = bookingUtility.FindListingByID(selectedListingID);
-            //public Booking(int sessionID, string customerName, string customerEmail, string trainingDate, int trainerID, string trainerName, string sessionStatus)
+                Listing selectedListing = listingUtility.FindListingByID(selectedListingID);
+                listingUtility.MarkListingAsTaken(selectedListingID);
 
-            newSession.SetSessionID(Booking.GetCount() + 1);  //assigns listing ID
-            System.Console.Write("Please enter your name:");
-            newSession.SetCustomerName(Console.ReadLine());
+                //public Booking(int sessionID, string customerName, string customerEmail, string trainingDate, int trainerID, string trainerName, string sessionStatus)
 
-            System.Console.Write("Please enter your email address: ");
-            newSession.SetCustomerEmail(Console.ReadLine());
+                newSession.SetSessionID(Booking.GetSessionCount() + 1);  //assigns listing ID
+                System.Console.Write("Please enter your name:");
+                newSession.SetCustomerName(Console.ReadLine());
 
-          //  newSession.SetTrainingDate(listings[int.Parse(selectedListingID)].GetSessionDate());
-            newSession.SetTrainerID(listings[int.Parse(selectedListingID)].GetTrainerID());
-            newSession.SetTrainerName(listings[int.Parse(selectedListingID)].GetTrainerName());
-            newSession.SetSessionStatus("Booked");
+                System.Console.Write("Please enter your email address: ");
+                newSession.SetCustomerEmail(Console.ReadLine());
 
-            sessions[Booking.GetCount()] = newSession;
-            System.Console.WriteLine("Booking successfully added.");
+                newSession.SetTrainerID(listings[int.Parse(selectedListingID)].GetTrainerID());
+                newSession.SetTrainerName(listings[int.Parse(selectedListingID)].GetTrainerName());
+                newSession.SetSessionStatus("Booked");
 
-            Booking.IncCount();
-            SaveSession();
-            Thread.Sleep(5000);
+                sessions[Booking.GetSessionCount()] = newSession;
+                System.Console.WriteLine("Booking successfully added.");
+
+                Booking.IncSessionCount();
+                SaveSession();
+                Thread.Sleep(5000);
             }
             catch (Exception ex)
             {
@@ -146,6 +119,27 @@ namespace mis_221_pa_5_srjohnson16
             }
         }
 
+        public void CancelBooking()
+        {
+            try
+            {
+                Console.Write("Enter the ID of the session you like to cancel: ");
+
+                string selectedSessionID = Console.ReadLine();
+
+                FindSessionByID(selectedSessionID);
+                //-----------------------------Update session status in transaction.txt---------------------------
+                MarkSessionAsCancelled(selectedSessionID);
+
+                SaveSession();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+
+        }
 
         private void SaveSession()
         {
@@ -156,7 +150,34 @@ namespace mis_221_pa_5_srjohnson16
             }
             outFile.Close();
         }
+        public void MarkSessionAsCancelled(string selectedSession)
+        {
+            //returns the object 
+            FindSessionByID(selectedSession).SetSessionStatus("Canceled");
+            System.Console.WriteLine("Booking Successfully Cancelled");
 
+            SaveSession();
+        }
+
+        private int FindSession(string searchVal)
+        {
+            for (int i = 0; i < Booking.GetSessionCount(); i++)
+            {
+                if (sessions[i].GetSessionID() == int.Parse(searchVal))
+                {
+                    System.Console.WriteLine("Session found..");                        //!Delete
+                    return i;
+                }
+            }
+            return -1;
+        }
+        //Searching. Search listing object array by listing ID
+        public Booking FindSessionByID(string sessionId)
+        {
+            return sessions[FindSession(sessionId)];
+        }
+
+        //updates the status of the listing to "taken"
 
     }
 
@@ -177,6 +198,7 @@ namespace mis_221_pa_5_srjohnson16
 //     string selectedListingID = Console.ReadLine();
 //     // Find selected listing object
 //     Listing selectedListing = ListingUtility.FindListingById(selectedListingID);
+
 //     ListingUtility.MarkListingAsTaken(selectedListingID);
 
 //     Booking newSession = new Booking() { };

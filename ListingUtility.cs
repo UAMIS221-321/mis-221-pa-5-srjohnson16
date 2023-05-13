@@ -54,9 +54,7 @@ namespace mis_221_pa_5_srjohnson16
         {
             Listing newListing = new Listing();
             System.Console.WriteLine("Please enter the listing ID as a whole number: ");
-            newListing.SetListingID(Listing.GetCount()+1);
-
-            //!if the listing already exists then prompt user for new listing ID
+            newListing.SetListingID(Listing.GetCount() + 1);
 
             System.Console.WriteLine("Please enter the trainer name: ");
             newListing.SetTrainerName(Console.ReadLine());
@@ -150,10 +148,9 @@ namespace mis_221_pa_5_srjohnson16
 
             Save();
         }
-        private void Save()
+        public void Save()
         {
             StreamWriter outFile = new StreamWriter("listing.txt");
-
 
             for (int i = 0; i < Listing.GetCount(); i++)
             {
@@ -163,7 +160,7 @@ namespace mis_221_pa_5_srjohnson16
 
         }
         //returns the index of interest
-        private  int FindListing(string searchVal)
+        private int FindListing(string searchVal)
         {
             for (int i = 0; i < Listing.GetCount(); i++)
             {
@@ -176,7 +173,7 @@ namespace mis_221_pa_5_srjohnson16
             return -1;
         }
         //Searching. Search listing object array by listing ID
-        public  Listing FindListingById(string listingId)
+        public Listing FindListingByID(string listingId)
         {
             return listings[FindListing(listingId)];
         }
@@ -185,7 +182,7 @@ namespace mis_221_pa_5_srjohnson16
         public void MarkListingAsTaken(string selectedListing)
         {
             //returns the object 
-            FindListingById(selectedListing).SetIsTaken(true);
+            FindListingByID(selectedListing).SetIsTaken(true);
 
             Save();
         }
@@ -193,7 +190,7 @@ namespace mis_221_pa_5_srjohnson16
         public void MarkListingAsCancelled(string selectedListing)
         {
             //returns the object 
-            FindListingById(selectedListing).SetIsTaken(false);
+            FindListingByID(selectedListing).SetIsTaken(false);
             System.Console.WriteLine(" MarkListingAsCancelled() method");
             Save();
         }
